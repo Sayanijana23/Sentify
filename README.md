@@ -501,6 +501,20 @@ Through this project, the following concepts are demonstrated:
 
 ---
 
+##  Demo UI 
+<img width="1600" height="813" alt="image" src="https://github.com/user-attachments/assets/a2f5ea57-57f8-49b7-84dc-9386c386b366" />
+
+## Sentiment Analysis Example with Positive Review 🟢
+
+<img width="1600" height="702" alt="image" src="https://github.com/user-attachments/assets/24da3836-b087-4960-bbd7-380819a4267c" />
+
+## Sentiment Analysis Example with Negative Review 🔴
+<img width="1600" height="764" alt="image" src="https://github.com/user-attachments/assets/023b0833-b27b-49a3-a2b4-d296de4b4ca5" />
+
+## Sentiment Analysis Example with Neutral Review ⚪
+<img width="1600" height="765" alt="image" src="https://github.com/user-attachments/assets/a58c6c97-9897-413a-a2af-88921f67b9c0" />
+
+
 ## 👩‍💻 Author
 
 ### Sayani Jana
