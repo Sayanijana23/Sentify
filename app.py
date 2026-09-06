@@ -111,41 +111,35 @@ st.markdown(
 # MODEL PATHS
 # ============================================================
 
-MODEL_PATH = "models/sentiment_model.pkl"
-VECTORIZER_PATH = "models/tfidf_vectorizer.pkl"
+LOGISTIC_MODEL_PATH = "models/logistic_pipeline.pkl"
+SVM_MODEL_PATH = "models/svm_pipeline.pkl"
 
 
 # ============================================================
-# LOAD MODEL
+# LOAD MODELS
 # ============================================================
 
 @st.cache_resource
-def load_model():
+def load_models():
 
-    model = joblib.load(MODEL_PATH)
-    vectorizer = joblib.load(VECTORIZER_PATH)
+    logistic_model = joblib.load(
+        LOGISTIC_MODEL_PATH
+    )
 
-    # Verify fitted TF-IDF vectorizer
-    if not hasattr(vectorizer, "idf_"):
-        raise ValueError(
-            "The TF-IDF vectorizer is not fitted."
-        )
+    svm_model = joblib.load(
+        SVM_MODEL_PATH
+    )
 
-    if not hasattr(vectorizer, "vocabulary_"):
-        raise ValueError(
-            "The TF-IDF vectorizer has no vocabulary."
-        )
-
-    return model, vectorizer
+    return logistic_model, svm_model
 
 
 # ============================================================
-# LOAD MODEL SAFELY
+# LOAD MODELS SAFELY
 # ============================================================
 
 try:
 
-    model, vectorizer = load_model()
+    logistic_model, svm_model = load_models()
 
 except FileNotFoundError:
 
@@ -159,7 +153,7 @@ except FileNotFoundError:
 except Exception as e:
 
     st.error(
-        f"Error loading model: {e}"
+        f"Error loading models: {e}"
     )
 
     st.stop()
@@ -234,17 +228,23 @@ def clean_text(text):
 # PREDICTION FUNCTION
 # ============================================================
 
-def predict_sentiment(text):
+def predict_sentiment(text, selected_model):
 
     cleaned_text = clean_text(text)
 
-    text_vector = vectorizer.transform(
-        [cleaned_text]
-    )
+    # Logistic Regression
+    if selected_model == "Logistic Regression":
 
-    prediction = model.predict(
-        text_vector
-    )[0]
+        prediction = logistic_model.predict(
+            [cleaned_text]
+        )[0]
+
+    # LinearSVC
+    else:
+
+        prediction = svm_model.predict(
+            [cleaned_text]
+        )[0]
 
     return (
         str(prediction).lower().strip(),
@@ -317,6 +317,19 @@ text = st.text_area(
 
 
 # ============================================================
+# MODEL SELECTION
+# ============================================================
+
+selected_model = st.selectbox(
+    "Choose Model",
+    [
+        "Logistic Regression",
+        "LinearSVC"
+    ]
+)
+
+
+# ============================================================
 # EXAMPLES
 # ============================================================
 
@@ -379,7 +392,10 @@ if st.button("🔍 Analyze Sentiment"):
 
     else:
 
-        prediction, cleaned_text = predict_sentiment(text)
+        prediction, cleaned_text = predict_sentiment(
+            text,
+            selected_model
+        )
 
 
         # ====================================================
